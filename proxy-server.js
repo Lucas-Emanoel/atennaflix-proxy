@@ -12,7 +12,7 @@ app.use(cors());
 
 // Rota principal para verificar se o servidor está no ar
 app.get('/', (req, res) => {
-  res.send('Servidor Proxy para AtennaFlix está a funcionar!');
+  res.send('Servidor Proxy para AtennaFlix está a funcionar! (v2)');
 });
 
 // O proxy em si
@@ -31,9 +31,18 @@ const videoProxy = createProxyMiddleware({
   // IMPORTANTE: Esta linha ignora o erro de certificado SSL inválido
   secure: false, 
   onProxyReq: (proxyReq, req, res) => {
-    // Define o cabeçalho 'host' para o do servidor de vídeo original
     const targetUrl = new URL(req.query.url);
     proxyReq.setHeader('host', targetUrl.host);
+    
+    // --- MELHORIA PRINCIPAL ---
+    // Adiciona cabeçalhos para simular um navegador real
+    proxyReq.setHeader('User-Agent', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36');
+    proxyReq.setHeader('Referer', targetUrl.origin); // Informa a origem do pedido
+    
+    // Remove cabeçalhos que podem identificar o proxy
+    proxyReq.removeHeader('x-forwarded-for');
+    proxyReq.removeHeader('x-forwarded-host');
+    proxyReq.removeHeader('x-forwarded-proto');
   },
   onError: (err, req, res) => {
     console.error('Erro no proxy:', err);
@@ -47,23 +56,3 @@ app.use('/proxy', videoProxy);
 app.listen(PORT, () => {
   console.log(`Servidor proxy a ouvir na porta ${PORT}`);
 });
-
-/* -------------------------------------------------- */
-
-/* Arquivo: package.json */
-
-{
-  "name": "atennaflix-proxy",
-  "version": "1.0.0",
-  "description": "Proxy para contornar problemas de SSL e CORS para o AtennaFlix",
-  "main": "proxy-server.js",
-  "scripts": {
-    "start": "node proxy-server.js"
-  },
-  "dependencies": {
-    "cors": "^2.8.5",
-    "express": "^4.18.2",
-    "http-proxy-middleware": "^2.0.6"
-  }
-}
-
