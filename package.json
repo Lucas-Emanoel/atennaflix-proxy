@@ -1,11 +1,13 @@
 {
-  "name": "proxy-video-streaming",
-  "version": "1.0.0",
-  "main": "index.js",
+  "name": "atennaflix-proxy-streaming",
+  "version": "2.0.0",
+  "description": "Proxy otimizado para streaming de vídeo para o AtennaFlix",
+  "main": "proxy-server.js",
   "scripts": {
-    "start": "node index.js"
+    "start": "node proxy-server.js"
   },
   "dependencies": {
+    "cors": "^2.8.5",
     "express": "^4.18.2",
     "request": "^2.88.2"
   }
