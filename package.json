@@ -1,15 +1,12 @@
 {
-  "name": "atennaflix-proxy",
+  "name": "proxy-video-streaming",
   "version": "1.0.0",
-  "description": "Proxy para contornar problemas de SSL e CORS para o AtennaFlix",
-  "main": "proxy-server.js",
+  "main": "index.js",
   "scripts": {
-    "start": "node proxy-server.js"
+    "start": "node index.js"
   },
   "dependencies": {
-    "cors": "^2.8.5",
     "express": "^4.18.2",
-    "http-proxy-middleware": "^2.0.6"
+    "request": "^2.88.2"
   }
 }
-
